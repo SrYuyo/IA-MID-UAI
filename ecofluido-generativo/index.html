@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diseño Generativo Fluido - Pausa Activa (p5.js + ml5.js)</title>
+  
+  <!-- Google Fonts: Inter & Space Grotesk -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- p5.js Core -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+  
+  <!-- ml5.js v1.2.1 (MoveNet / bodyPose) -->
+  <script src="https://unpkg.com/ml5@1.2.1/dist/ml5.min.js"></script>
+</head>
+<body>
+  <!-- Contenedor del Canvas p5.js a pantalla completa -->
+  <div id="canvas-container"></div>
+
+  <!-- HUD Flotante: Indicadores y Controles Ambientales -->
+  <header id="hud-panel" class="hud-container">
+    <div class="hud-header">
+      <div class="hud-title-wrap">
+        <span class="hud-badge">PROYECCIÓN AMBIENTAL</span>
+        <h1 class="hud-title">EcoFluido Generativo</h1>
+      </div>
+      <div class="hud-state-pill" id="state-pill">
+        <span class="status-indicator-dot" id="status-dot"></span>
+        <span class="status-indicator-text" id="status-text">Iniciando Visión...</span>
+      </div>
+    </div>
+
+    <!-- Telemetría en tiempo real -->
+    <div class="hud-metrics-grid">
+      <div class="metric-card">
+        <span class="metric-label">Personas</span>
+        <span class="metric-value" id="metric-persons">0</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">Velocidad</span>
+        <span class="metric-value" id="metric-speed">0.0 <small>px/f</small></span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">Cadencia / Int.</span>
+        <span class="metric-value" id="metric-intensity">0%</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">Partículas</span>
+        <span class="metric-value" id="metric-particles">3,500</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">Rendimiento</span>
+        <span class="metric-value" id="metric-fps">-- <small>FPS</small></span>
+      </div>
+    </div>
+
+    <!-- Menú de Ajustes Desplegable / Controles de Instalación -->
+    <div class="hud-controls-section" id="controls-section">
+      <div class="control-row">
+        <label for="input-mode">Modo de Entrada:</label>
+        <select id="input-mode">
+          <option value="webcam" selected>📹 Webcam Real (ml5 MoveNet)</option>
+          <option value="sim_mouse">🖱️ Simulación: Cursor interactivo</option>
+          <option value="sim_auto">🚶 Simulación: Transeúntes autónomos</option>
+        </select>
+      </div>
+
+      <div class="control-row">
+        <label for="slider-particles">Densidad de Partículas (<span id="val-particles">3500</span>):</label>
+        <input type="range" id="slider-particles" min="1000" max="7000" step="250" value="3500">
+      </div>
+
+      <div class="control-row">
+        <label for="slider-force">Fuerza de Inyección (<span id="val-force">1.8</span>x):</label>
+        <input type="range" id="slider-force" min="0.5" max="4.0" step="0.1" value="1.8">
+      </div>
+
+      <div class="control-row">
+        <label for="slider-fade">Persistencia de Estelas (<span id="val-fade">18</span>%):</label>
+        <input type="range" id="slider-fade" min="5" max="50" step="1" value="18">
+      </div>
+
+      <div class="control-row">
+        <label for="slider-vorticity">Turbulencia / Vórtice (<span id="val-vorticity">1.2</span>):</label>
+        <input type="range" id="slider-vorticity" min="0.0" max="3.0" step="0.1" value="1.2">
+      </div>
+
+      <div class="control-buttons-row">
+        <button id="btn-fullscreen" class="btn-action">⛶ Pantalla Completa (F)</button>
+        <button id="btn-debug" class="btn-action">👁️ Debug Visión (D)</button>
+        <button id="btn-clear" class="btn-action">✨ Limpiar Lienzo (C)</button>
+      </div>
+    </div>
+
+    <div class="hud-footer-hints">
+      <span>Atajos: <strong>[H]</strong> Ocultar Panel &bull; <strong>[F]</strong> Pantalla Completa &bull; <strong>[D]</strong> Vista Esqueleto &bull; <strong>[S]</strong> Alternar Simulación</span>
+    </div>
+  </header>
+
+  <!-- Botón flotante para restaurar HUD cuando esté oculto -->
+  <button id="hud-restore-btn" class="hud-restore-btn hidden" title="Mostrar controles [H]">
+    ⚙️ Controles
+  </button>
+
+  <!-- Mini Ventana de Depuración de Visión Computacional (Toggleable con 'D') -->
+  <div id="debug-overlay" class="debug-window hidden">
+    <div class="debug-title">
+      <span>ml5.js bodyPose Monitor</span>
+      <span id="debug-model-status">MoveNet activo</span>
+    </div>
+    <div id="debug-video-container">
+      <!-- El video o canvas de debug se insertará aquí -->
+    </div>
+    <div class="debug-info-list">
+      <div id="debug-keypoints-info">Keypoints: 0 detectados</div>
+      <div id="debug-com-info">Centro de masa: --</div>
+      <div id="debug-vel-info">Vector (dx, dy): [0, 0]</div>
+    </div>
+  </div>
+
+  <!-- Scripts Modulares de la Arquitectura Generativa -->
+  <script src="js/fluidField.js"></script>
+  <script src="js/particleSystem.js"></script>
+  <script src="js/bodyTracker.js"></script>
+  <script src="js/sketch.js"></script>
+</body>
+</html>

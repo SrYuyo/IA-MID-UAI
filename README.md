@@ -1,59 +1,75 @@
-# 🥊 SUPER K.O. BOXING - Web Tracker Edition
+# IA-MID-UAI - Proyectos de Inteligencia Artificial y Visión Computacional
 
-Un juego de boxeo estilo arcade retro (inspirado en **Super K.O. Boxing** y **Punch-Out!!**) desarrollado con **p5.js** y **ml5.js**, controlado completamente mediante **seguimiento corporal y de brazos por cámara web** (MoveNet Pose Estimation).
-
----
-
-## 🚀 Características Principales
-
-1. **Control por Visión Artificial en Tiempo Real**:
-   - **Esquivas Laterales**: Inclina tu torso o cabeza a la izquierda o derecha para esquivar ganchos.
-   - **Agacharse (Duck)**: Desciende tu centro de gravedad para que los golpes altos pasen de largo.
-   - **Guardia (Bloqueo Activo)**: Levanta ambas muñecas frente a tu cara para absorber golpes (85% de daño reducido).
-   - **Puñetazos Directos**: Lanza tu puño izquierdo o derecho hacia el frente para conectar jabs y directos.
-   - **Super K.O. Uppercut**: Cuando llenas el medidor de adrenalina al 100%, lanza ambos puños hacia adelante para un devastador golpe cinematográfico.
-
-2. **Inteligencia Artificial de Rivales (Estilo Arcade)**:
-   - **Bruiser Boris**: Boxeador de gran pegada y temibles *Haymakers* (golpes no bloqueables telegrafiados con brillo carmesí). Al fallar queda aturdido, abriendo una ventana para contra-golpes críticos.
-   - **Lightning Leo**: Oponente veloz con combinaciones rápidas que pondrá a prueba tus reflejos de esquiva.
-
-3. **Efectos de Audio y Visuales**:
-   - **Sintetizador Web Audio API puro**: Sin necesidad de archivos de audio externos (cero errores de carga o CORS). Campanas, crujidos de impacto, silbidos de viento, avisos de peligro y rugido del público.
-   - **Efectos visuales Arcade**: Sacudida de pantalla (*screen shake*), congelamiento de impacto (*hit-stop*), textos de cómic ("¡POW!", "¡BAM!", "¡CONTRA-GOLPE!"), chispas y gotas de sudor.
-   - **PiP de Cámara con Esqueleto**: Mini visor en pantalla con detección de puntos clave (COCO-17), retícula de postura neutral y estado de acción actual.
-
-4. **Soporte Híbrido (Teclado)**:
-   - Si no dispones de cámara en algún momento, puedes jugar inmediatamente con:
-     - `←` / `→`: Esquivar Izquierda / Derecha
-     - `↓`: Agacharse
-     - `Espacio`: Guardia / Bloqueo
-     - `Z`: Golpe Izquierdo
-     - `X`: Golpe Derecho
-     - `S`: Super K.O. Blow
-     - `C`: Calibrar Cámara
-     - `P`: Mostrar / Ocultar mini-cámara
+Repositorio de proyectos y experimentos desarrollados con **Inteligencia Artificial**, **Visión Computacional en Tiempo Real** (`ml5.js / MoveNet`) y **Diseño Generativo / Simulaciones Interactivas** (`p5.js`).
 
 ---
 
-## ⚙️ Cómo Ejecutar el Juego Localmente
+## 📁 Estructura del Repositorio
 
-Dado que los navegadores exigen un contexto seguro (`http://localhost` o `https://`) para permitir el acceso a la cámara web (`navigator.mediaDevices.getUserMedia`), debes iniciar un servidor local:
-
-### Opción 1: Con Python (Recomendado)
-Abre una terminal en esta carpeta y ejecuta:
-```bash
-python -m http.server 8000
 ```
-Luego abre tu navegador en:
-👉 `http://localhost:8000`
-
-### Opción 2: Con VS Code / Cursor Live Server
-Haz clic derecho en `index.html` y selecciona **"Open with Live Server"**.
+IA-MID-UAI/
+│
+├── 🌊 ecofluido-generativo/          # Sistema Generativo de Fluidos (Pausa Activa)
+│   ├── index.html                    # Lienzo interactivo y HUD ambiental
+│   ├── style.css                     # Estilos oscuros para proyección en muro
+│   ├── README.md                     # Documentación y guía de calibración
+│   └── js/
+│       ├── bodyTracker.js            # Visión computacional (ml5.js MoveNet / Centro de Masa)
+│       ├── fluidField.js             # Grilla vectorial advectiva (Navier-Stokes simplificado / Perlin)
+│       ├── particleSystem.js         # Motor de partículas reactivas y modulación cromática
+│       └── sketch.js                 # Ciclo de vida y orquestador p5.js
+│
+└── 🥊 super-ko-boxing/               # Videojuego Arcade Controlado por Visión
+    ├── index.html                    # Pantalla del ring y arcade UI
+    ├── style.css                     # Estilos retro arcade
+    ├── README.md                     # Manual de juego y movimientos
+    └── js/
+        ├── audio.js                  # Efectos de sonido y sintetizador de audio
+        ├── fx.js                     # Efectos de impacto y partículas
+        ├── opponent.js               # IA de los boxeadores rivales
+        ├── player.js                 # Física y estados del jugador
+        ├── ring.js                   # Renderizado del cuadrilátero
+        ├── tracker.js                # Detección de golpes, esquivas y guardia con webcam
+        └── sketch.js                 # Orquestador del juego
+```
 
 ---
 
-## 🎯 Consejos para Mejor Detección con la Cámara
+## 🌊 1. EcoFluido Generativo (Pausa Activa)
 
-1. **Iluminación**: Asegúrate de tener buena luz de frente (evita contraluces intensos de ventanas o focos a tu espalda).
-2. **Distancia**: Sitúate a entre 1 y 2 metros de la cámara para que tu cabeza, hombros y brazos sean claramente visibles.
-3. **Calibración**: Al iniciar, quédate en el centro en postura de guardia relajada durante 2 segundos para que el sistema aprenda automáticamente tu posición neutra. Puedes presionar la tecla **C** en cualquier momento para recalibrar.
+Sistema de diseño generativo interactivo diseñado para instalaciones y proyección en muros de oficina. Analiza el tránsito de personas en tiempo real y responde con dinámicas de fluidos y estelas bioluminiscentes:
+- **Modo Reposo**: Corrientes lentas y tonos fríos meditativos (azul profundo e índigo) ante ausencia de movimiento.
+- **Paso Lento / Calmo**: Ondulación suave y tonos cian/esmeralda para invitar a la relajación.
+- **Paso Rápido / Dinámico**: Turbulencia, vórtices de dispersión amplia y tonos cálidos vivos (magenta, ámbar, dorado).
+
+### Ejecución:
+```bash
+cd ecofluido-generativo
+py -m http.server 8000
+```
+Abrir: [http://localhost:8000](http://localhost:8000)
+
+---
+
+## 🥊 2. Super K.O. Boxing - Web Tracker Edition
+
+Juego de boxeo arcade retro donde el jugador controla a su avatar usando su propio cuerpo frente a la cámara web:
+- **Esquivas Laterales**: Inclinaciones de torso para esquivar ganchos.
+- **Agacharse (Duck)**: Descender el centro de gravedad para evadir golpes altos.
+- **Guardia Activa**: Levantar ambas muñecas para bloquear ataques rivales.
+- **Puñetazos Directos**: Jabs y cross con las manos hacia la cámara.
+- **Super K.O. Uppercut**: Ataque especial al llenar la barra de adrenalina.
+
+### Ejecución:
+```bash
+cd super-ko-boxing
+py -m http.server 8000
+```
+Abrir: [http://localhost:8000](http://localhost:8000)
+
+---
+
+## 🛠️ Requisitos
+- Navegador web moderno con soporte para WebGL y WebRTC (Google Chrome, Edge, Firefox, Safari).
+- Acceso a cámara web (para el tracking en tiempo real con ml5.js).
+- Servidor local HTTP (`python -m http.server`, `npx serve`, o Live Server) para evitar restricciones de seguridad CORS del navegador con la cámara.
