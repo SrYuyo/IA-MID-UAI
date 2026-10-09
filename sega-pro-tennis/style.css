@@ -1,0 +1,376 @@
+/* =========================================================
+   SEGA PRO TENNIS '98 - Retro Arcade Aesthetic & UI
+   ========================================================= */
+
+:root {
+  --sega-blue: #004bb6;
+  --sega-light-blue: #00a0f0;
+  --arcade-yellow: #ffe600;
+  --arcade-red: #ff2a2a;
+  --arcade-green: #00e676;
+  --court-clay: #d65a31;
+  --court-grass: #1d7a3f;
+  --court-hard: #1e5fa0;
+  --dark-bg: #070b14;
+  --font-retro: 'Press Start 2P', monospace;
+  --font-headline: 'Teko', sans-serif;
+  --font-sans: 'Space Grotesk', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--dark-bg);
+  font-family: var(--font-sans);
+  color: #fff;
+  user-select: none;
+}
+
+#game-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#canvas-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+#canvas-wrapper canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Efecto Scanlines CRT Arcade */
+.crt-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.22) 50%
+  ), linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.03),
+    rgba(0, 255, 0, 0.01),
+    rgba(0, 0, 255, 0.03)
+  );
+  background-size: 100% 3px, 6px 100%;
+  opacity: 0.85;
+}
+
+/* Header & Marcador SEGA */
+.arcade-hud {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.marquee-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--arcade-yellow);
+  padding: 4px 16px;
+  border-radius: 4px;
+  box-shadow: 0 0 15px rgba(255, 230, 0, 0.4);
+}
+
+.sega-logo {
+  font-family: var(--font-headline);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--sega-blue);
+  padding: 0 10px;
+  letter-spacing: 2px;
+  border-radius: 3px;
+  text-shadow: 2px 2px 0px #002566;
+}
+
+.title-sub {
+  font-family: var(--font-retro);
+  font-size: 0.7rem;
+  color: var(--arcade-yellow);
+  letter-spacing: 1px;
+}
+
+/* Marcador Principal */
+.scoreboard-main {
+  display: flex;
+  align-items: center;
+  background: rgba(10, 16, 28, 0.88);
+  border: 3px solid #2a3c5a;
+  border-radius: 8px;
+  padding: 8px 18px;
+  gap: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+}
+
+.player-score-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.p-tag {
+  font-family: var(--font-retro);
+  font-size: 0.65rem;
+  color: var(--sega-light-blue);
+}
+
+.p2-box .p-tag {
+  color: var(--arcade-red);
+}
+
+.p-games {
+  font-family: var(--font-headline);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #fff;
+  background: #18233c;
+  padding: 0 10px;
+  border-radius: 4px;
+  line-height: 1;
+}
+
+.p-points {
+  font-family: var(--font-retro);
+  font-size: 1.25rem;
+  color: var(--arcade-yellow);
+  min-width: 48px;
+  text-align: center;
+  text-shadow: 0 0 8px rgba(255, 230, 0, 0.6);
+}
+
+.score-center-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 100px;
+}
+
+.status-callout {
+  font-family: var(--font-headline);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--arcade-green);
+  letter-spacing: 1px;
+}
+
+.rally-counter {
+  font-family: var(--font-retro);
+  font-size: 0.5rem;
+  color: #8fa3c7;
+}
+
+/* Barra de Selección de Control */
+.control-panel {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(10, 16, 32, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(12px);
+  padding: 10px 18px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.selector-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.selector-group label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #9cb2d6;
+  text-transform: uppercase;
+}
+
+.selector-group select {
+  background: #18243c;
+  border: 1px solid #32476e;
+  border-radius: 6px;
+  color: #fff;
+  padding: 5px 8px;
+  font-size: 0.75rem;
+  font-family: var(--font-sans);
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.selector-group select:focus {
+  border-color: var(--arcade-yellow);
+}
+
+.btn-group {
+  display: flex;
+  gap: 6px;
+  margin-left: 6px;
+}
+
+.arcade-btn {
+  background: #1f3050;
+  border: 1px solid #3c5685;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.arcade-btn:hover {
+  background: var(--sega-blue);
+  border-color: var(--sega-light-blue);
+  transform: translateY(-1px);
+}
+
+.arcade-btn.active {
+  background: var(--arcade-yellow);
+  color: #000;
+  border-color: #fff;
+}
+
+/* Carteles Gigantes Arcade (Popups) */
+.arcade-announcer {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  pointer-events: none;
+  transition: transform 0.2s ease, opacity 0.25s ease;
+}
+
+.arcade-announcer.hidden {
+  opacity: 0;
+  transform: translate(-50%, -40%) scale(0.7);
+}
+
+.announcer-text {
+  font-family: var(--font-headline);
+  font-size: 4.8rem;
+  font-weight: 700;
+  color: var(--arcade-yellow);
+  text-shadow: 4px 4px 0px #000, 0 0 30px rgba(255, 230, 0, 0.8);
+  letter-spacing: 4px;
+  text-align: center;
+  animation: pulse-banner 0.6s infinite alternate;
+}
+
+@keyframes pulse-banner {
+  0% { transform: scale(0.96); }
+  100% { transform: scale(1.04); }
+}
+
+/* Monitor de Visión MoveNet */
+.vision-window {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 15;
+  width: 220px;
+  background: rgba(10, 16, 28, 0.94);
+  border: 2px solid var(--sega-light-blue);
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8);
+  transition: opacity 0.3s ease;
+}
+
+.vision-window.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.vision-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--sega-light-blue);
+  margin-bottom: 6px;
+}
+
+#vision-video-wrapper {
+  width: 100%;
+  height: 120px;
+  background: #000;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #203554;
+}
+
+#vision-video-wrapper video,
+#vision-video-wrapper canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.vision-telemetry {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 6px;
+  font-family: monospace;
+  font-size: 0.62rem;
+  color: #9cb2d6;
+}
+
+/* Leyenda de Ayuda */
+.controls-legend {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  gap: 16px;
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+}
+
+.controls-legend strong {
+  color: var(--arcade-yellow);
+}

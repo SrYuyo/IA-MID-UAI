@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEGA PRO TENNIS '98 - Arcade AI Edition</title>
+  
+  <!-- Retro Arcade Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Teko:wght@600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- p5.js Core -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+  
+  <!-- ml5.js v1.2.1 (MoveNet / bodyPose) -->
+  <script src="https://unpkg.com/ml5@1.2.1/dist/ml5.min.js"></script>
+</head>
+<body>
+  <!-- Contenedor del Juego -->
+  <div id="game-container">
+    <div id="canvas-wrapper"></div>
+    <div class="crt-overlay"></div>
+
+    <!-- Cabecera y Marcador Arcade Clásico SEGA -->
+    <header id="arcade-scoreboard" class="arcade-hud">
+      <div class="marquee-title">
+        <span class="sega-logo">SEGA</span>
+        <span class="title-sub">PRO TENNIS '98</span>
+      </div>
+
+      <div class="scoreboard-main">
+        <div class="player-score-box p1-box">
+          <div class="p-tag" id="p1-label">1P (YOU)</div>
+          <div class="p-games" id="p1-games">0</div>
+          <div class="p-points" id="p1-points">00</div>
+        </div>
+
+        <div class="score-center-status">
+          <div class="status-callout" id="umpire-callout">SERVE</div>
+          <div class="rally-counter">RALLY: <span id="rally-count">0</span></div>
+        </div>
+
+        <div class="player-score-box p2-box">
+          <div class="p-points" id="p2-points">00</div>
+          <div class="p-games" id="p2-games">0</div>
+          <div class="p-tag" id="p2-label">CPU (BORIS)</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Barra de Selección de Control y Modo de Juego -->
+    <div id="control-bar" class="control-panel">
+      <div class="selector-group">
+        <label>👥 Modo de Juego:</label>
+        <select id="select-game-mode">
+          <option value="1p_ai" selected>1 Jugador vs IA (CPU)</option>
+          <option value="2p_local">2 Jugadores (Local / 2 Cuerpos)</option>
+        </select>
+      </div>
+
+      <div class="selector-group">
+        <label>🎯 Control Corporal:</label>
+        <select id="select-control-type">
+          <option value="arms" selected>💪 Brazos (Swing & Saque)</option>
+          <option value="head">🗣️ Cabeza (Inclinación Lateral)</option>
+          <option value="hybrid">⌨️ Teclado / Híbrido</option>
+        </select>
+      </div>
+
+      <div class="selector-group">
+        <label>⚡ Dificultad IA:</label>
+        <select id="select-ai-diff">
+          <option value="pro" selected>Pro Circuit</option>
+          <option value="rookie">Amateur</option>
+          <option value="grandslam">Grand Slam (Experto)</option>
+        </select>
+      </div>
+
+      <div class="btn-group">
+        <button id="btn-camera" class="arcade-btn" title="Alternar monitor de cámara">📹 Visión [V]</button>
+        <button id="btn-sound" class="arcade-btn" title="Alternar Sonido">🔊 Audio [M]</button>
+        <button id="btn-fullscreen" class="arcade-btn" title="Pantalla completa">⛶ Fullscreen [F]</button>
+      </div>
+    </div>
+
+    <!-- Popups y Carteles Gigantes Arcade -->
+    <div id="arcade-announcer" class="arcade-announcer hidden">
+      <div class="announcer-text" id="announcer-text">MATCH START!</div>
+    </div>
+
+    <!-- Monitor de Visión MoveNet (Toggleable) -->
+    <div id="vision-monitor" class="vision-window hidden">
+      <div class="vision-header">
+        <span>MoveNet Tracker</span>
+        <span id="tracker-status">Iniciando...</span>
+      </div>
+      <div id="vision-video-wrapper"></div>
+      <div class="vision-telemetry">
+        <div id="vision-p1-track">P1: Calibrando</div>
+        <div id="vision-p2-track">P2: En espera</div>
+      </div>
+    </div>
+
+    <!-- Guía de Controles en Pantalla -->
+    <div id="controls-help" class="controls-legend">
+      <span><strong>💪 Brazos:</strong> Mueve el cuerpo para correr. Agita el brazo derecho (Forehand) o izquierdo (Backhand). Eleva ambos para Saque/Smash.</span>
+      <span><strong>🗣️ Cabeza:</strong> Inclínate a izq/der para correr; timing de swing automático al impacto.</span>
+      <span><strong>⌨️ Teclado:</strong> Flechas / WASD para moverte &bull; [Espacio] o [Z] para golpear &bull; [X] Globo/Slice.</span>
+    </div>
+  </div>
+
+  <!-- Scripts Modulares del Juego -->
+  <script src="js/audio.js"></script>
+  <script src="js/court.js"></script>
+  <script src="js/ball.js"></script>
+  <script src="js/player.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/score.js"></script>
+  <script src="js/tracker.js"></script>
+  <script src="js/sketch.js"></script>
+</body>
+</html>
