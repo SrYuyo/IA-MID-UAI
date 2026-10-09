@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SUPER K.O. BOXING - Web Tracker (p5.js + ml5.js)</title>
+  
+  <!-- Estilos del Juego -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- p5.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+  
+  <!-- ml5.js CDN (v1.4.0 con soporte MoveNet) -->
+  <script src="https://unpkg.com/ml5@1.4.0/dist/ml5.min.js"></script>
+</head>
+<body>
+
+  <header>
+    <h1>SUPER K.O. BOXING</h1>
+    <div class="subtitle">AI Body Motion Tracking Edition • p5.js & ml5.js</div>
+  </header>
+
+  <!-- Gabinete Arcade Principal -->
+  <main class="arcade-frame">
+    <div id="game-container"></div>
+    <div id="scanlines" class="scanlines"></div>
+
+    <!-- Botones de Control Rápidos (Disponibles dentro del gabinete y en pantalla completa) -->
+    <nav class="control-bar">
+      <button class="btn-arcade" style="background: #00ffcc; color: #050b14; font-weight: 800;" onclick="startMatch()">🥊 ¡Iniciar Pelea!</button>
+      <button class="btn-arcade" style="background: #ffbe0b; color: #050b14; font-weight: 800;" onclick="restartMatch()">🔄 Volver a Jugar (R)</button>
+      <button class="btn-arcade" onclick="startCalibration()">🎯 Calibrar Cámara (C)</button>
+      <button class="btn-arcade" onclick="togglePip()">📷 Cámara PiP (P)</button>
+      <button class="btn-arcade" onclick="toggleScanlines()">📺 Scanlines CRT</button>
+      <button class="btn-arcade danger" onclick="toggleOpponent()">🥊 Cambiar Rival</button>
+      <button class="btn-arcade" onclick="toggleFullscreen()">⛶ Pantalla Completa</button>
+    </nav>
+  </main>
+
+  <!-- Tarjetas Guía de Movimiento Físico -->
+  <section class="guide-section">
+    <div class="guide-title">
+      <span>⚡</span> GUÍA DE MOVIMIENTOS CORPORALES (WEBCAM)
+    </div>
+    <div class="moves-grid">
+      <div class="move-card">
+        <h4>ESQUIVAR LATERAL</h4>
+        <p>Inclina la cabeza o el torso hacia la izquierda o derecha para evitar ganchos rivales.</p>
+        <div class="move-badge">Teclado: ← / →</div>
+      </div>
+      <div class="move-card">
+        <h4>AGANCHARSE (DUCK)</h4>
+        <p>Flexiona las rodillas o baja el torso para esquivar ataques demoledores por arriba.</p>
+        <div class="move-badge">Teclado: ↓</div>
+      </div>
+      <div class="move-card">
+        <h4>GUARDIA (BLOQUEO)</h4>
+        <p>Junta ambas muñecas levantadas frente a tu rostro para absorber golpes (85% daño reducido).</p>
+        <div class="move-badge">Teclado: ESPACIO</div>
+      </div>
+      <div class="move-card red">
+        <h4>GOLPE IZQ / DER</h4>
+        <p>Lanza tu puño con velocidad hacia la pantalla. Si golpeas cuando el rival falla: ¡CONTRA-GOLPE!</p>
+        <div class="move-badge">Teclado: Z (Izq) / X (Der)</div>
+      </div>
+      <div class="move-card gold">
+        <h4>SUPER K.O. BLOW</h4>
+        <p>Con el medidor al 100%, lanza ambos puños con fuerza al frente para un demoledor uppercut.</p>
+        <div class="move-badge">Teclado: S</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Desarrollado con <strong>p5.js</strong> y <strong>ml5.js (MoveNet)</strong> • Inspirado en los clásicos del Arcade
+  </footer>
+
+  <!-- Scripts del Juego -->
+  <script src="js/audio.js"></script>
+  <script src="js/fx.js"></script>
+  <script src="js/ring.js"></script>
+  <script src="js/tracker.js"></script>
+  <script src="js/player.js"></script>
+  <script src="js/opponent.js"></script>
+  <script src="js/sketch.js"></script>
+
+  <script>
+    // Helpers para la interfaz HTML
+    function restartMatch() {
+      if (typeof window.restartMatch === 'function') {
+        window.restartMatch();
+      } else if (typeof startMatch === 'function') {
+        startMatch();
+      }
+    }
+
+    function togglePip() {
+      showCameraPip = !showCameraPip;
+    }
+
+    function toggleScanlines() {
+      const sl = document.getElementById('scanlines');
+      sl.style.display = (sl.style.display === 'none') ? 'block' : 'none';
+    }
+
+    function toggleOpponent() {
+      selectedOpponent = (selectedOpponent === 'BORIS') ? 'LEO' : 'BORIS';
+      opponent = new Opponent(GAME_W, GAME_H, selectedOpponent);
+      if (gameState === 'FIGHT') {
+        startMatch();
+      }
+    }
+
+    function toggleFullscreen() {
+      const frame = document.querySelector('.arcade-frame');
+      if (!document.fullscreenElement) {
+        frame.requestFullscreen().catch(err => {
+          console.warn("Fullscreen request error:", err);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
+    window.toggleFullscreen = toggleFullscreen;
+  </script>
+</body>
+</html>
