@@ -9,19 +9,16 @@ Repositorio de proyectos y videojuegos desarrollados con **Inteligencia Artifici
 ```
 IA-MID-UAI/
 │
-├── 🎾 sega-pro-tennis/               # Pro Tenis SEGA Arcade '98 (MoveNet + IA + 2P)
-│   ├── index.html                    # Pista 2.5D, marcador SEGA y HUD
-│   ├── style.css                     # Estética retro arcade y scanlines CRT
-│   ├── README.md                     # Manual de juego y calibración de gestos
+├── 🕹️ atari-pong/                    # PONG Original (1972) - MoveNet + IA + 2P
+│   ├── index.html                    # Mueble arcade clásico de madera y pantalla CRT
+│   ├── style.css                     # Estética retro de Al Alcorn, bisel y scanlines
+│   ├── README.md                     # Manual de juego, física de 8 zonas y controles
 │   └── js/
-│       ├── audio.js                  # Efectos sonoros sintetizados y locuciones
-│       ├── court.js                  # Proyección 2.5D de la pista y estadio
-│       ├── ball.js                   # Física 3D de pelota, rebotes y sombras
-│       ├── player.js                 # Animaciones 2.5D, swings y caja de colisión
-│       ├── ai.js                     # Inteligencia Artificial táctica de CPU
-│       ├── score.js                  # Reglas oficiales de tenis, deuce y ventajas
-│       ├── tracker.js                # Detección corporal: Brazos / Cabeza / Teclado
-│       └── sketch.js                 # Orquestador del ciclo de vida p5.js
+│       ├── audio.js                  # Sintetizador de frecuencias originales (490Hz, 226Hz, 115Hz)
+│       ├── pongGame.js               # Física, aceleración de pelota y rebotes
+│       ├── ai.js                     # IA de la CPU (Principiante, Arcade 1972, Master)
+│       ├── tracker.js                # Control por Visión: Cabeza / Brazos / Teclado
+│       └── sketch.js                 # Ciclo de vida y orquestador p5.js
 │
 ├── 🌊 ecofluido-generativo/          # Sistema Generativo de Fluidos (Pausa Activa)
 │   ├── index.html                    # Lienzo interactivo y HUD ambiental
@@ -49,16 +46,19 @@ IA-MID-UAI/
 
 ---
 
-## 🎾 1. SEGA Pro Tennis '98 - Arcade AI Edition
+## 🕹️ 1. PONG (1972) - Atari Arcade AI Edition
 
-Juego de tenis arcade retro inspirado en los clásicos de SEGA (Virtua Tennis). Ofrece opciones de control corporal seleccionables por el usuario y soporte multijugador:
-- **Control por Brazos**: Movimiento por tronco y swings rápidos de muñeca derecha (Drive), izquierda (Revés) o ambas arriba (Saque/Smash).
-- **Control por Cabeza**: Desplazamiento lateral por inclinación de cabeza y golpe sincronizado.
-- **Modos de Juego**: 1 Jugador contra IA táctica (Amateur, Pro, Grand Slam) o 2 Jugadores simultáneos frente a la cámara web.
+Recreación fiel del mítico arcade **PONG de Atari (1972)**, con la física analógica original de Allan Alcorn y control multimodal por visión artificial:
+- **Control por Cabeza**: Mueve la cabeza hacia arriba o abajo frente a la webcam para controlar la altura de la pala.
+- **Control por Brazos**: Sube o baja la muñeca para dirigir la pala.
+- **Modos de Juego**:
+  - *1 Jugador vs IA*: Compite contra la CPU con tres dificultades (*Principiante*, *Arcade Clásico 1972*, *Imposible*).
+  - *2 Jugadores*: Dos personas simultáneas en cámara (cuerpo izquierdo controla Pala 1, cuerpo derecho controla Pala 2).
+- **Fidelidad**: Sonidos sintetizados en frecuencias originales (490 Hz, 226 Hz y 115 Hz), red de segmentos discontinuos, rebotes en 8 zonas y pantalla CRT de fósforo.
 
 ### Ejecución:
 ```bash
-cd sega-pro-tennis
+cd atari-pong
 py -m http.server 8000
 ```
 Abrir: [http://localhost:8000](http://localhost:8000)

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PONG (1972) - Atari Arcade AI Edition</title>
+  
+  <!-- Retro Fonts: VT323 & Press Start 2P -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- p5.js Core -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+  
+  <!-- ml5.js v1.2.1 (MoveNet / bodyPose) -->
+  <script src="https://unpkg.com/ml5@1.2.1/dist/ml5.min.js"></script>
+</head>
+<body>
+  <!-- Mueble de Arcade Clásico PONG (Estilo Cabina de Madera 1972) -->
+  <div class="arcade-cabinet">
+    <!-- Marquesina Superior -->
+    <div class="cabinet-marquee">
+      <div class="pong-logo">PONG</div>
+      <div class="marquee-subtitle">ATARI &bull; 1972 ARCADE EDITION</div>
+    </div>
+
+    <!-- Pantalla CRT con Marco Biselado -->
+    <div class="crt-frame">
+      <div id="canvas-container"></div>
+      <div class="crt-scanlines"></div>
+      <div class="crt-glow"></div>
+    </div>
+
+    <!-- Panel de Control y Selección de Modo -->
+    <div class="cabinet-control-panel">
+      <div class="control-grid">
+        <div class="control-card">
+          <label for="select-mode">🕹️ MODO DE JUEGO:</label>
+          <select id="select-mode">
+            <option value="1p_ai" selected>1 Jugador vs IA (CPU)</option>
+            <option value="2p_local">2 Jugadores (2 Cuerpos en Cámara)</option>
+          </select>
+        </div>
+
+        <div class="control-card">
+          <label for="select-tracking">🎯 CONTROL CORPORAL:</label>
+          <select id="select-tracking">
+            <option value="head" selected>🗣️ Cabeza (Posición Vertical / Inclinación)</option>
+            <option value="arms">💪 Brazos (Elevación de Muñecas)</option>
+            <option value="keyboard">⌨️ Teclado / Híbrido (W/S - Flechas)</option>
+          </select>
+        </div>
+
+        <div class="control-card">
+          <label for="select-difficulty">⚡ DIFICULTAD IA:</label>
+          <select id="select-difficulty">
+            <option value="arcade" selected>Arcade Clásico (1972)</option>
+            <option value="easy">Principiante</option>
+            <option value="master">Imposible (IA Perfecta)</option>
+          </select>
+        </div>
+
+        <div class="control-buttons">
+          <button id="btn-camera" class="arcade-btn" title="Alternar monitor de cámara">📹 Monitor [V]</button>
+          <button id="btn-sound" class="arcade-btn" title="Silenciar / Activar sonido">🔊 Audio [M]</button>
+          <button id="btn-fullscreen" class="arcade-btn" title="Pantalla completa">⛶ Fullscreen [F]</button>
+          <button id="btn-reset" class="arcade-btn" title="Reiniciar partida">🔄 Reiniciar [R]</button>
+        </div>
+      </div>
+
+      <div class="instructions-banner">
+        <span><strong>🗣️ CABEZA:</strong> Mueve tu cabeza arriba/abajo frente a la cámara para desplazar tu pala.</span>
+        <span><strong>💪 BRAZOS:</strong> Sube o baja tu muñeca para controlar la altura de la pala.</span>
+        <span><strong>⌨️ TECLADO:</strong> Jugador 1: [W] y [S] &bull; Jugador 2: [▲] y [▼] &bull; [Espacio] para reanudar saque.</span>
+      </div>
+    </div>
+
+    <!-- Mini Monitor de Visión MoveNet (Toggleable) -->
+    <div id="vision-monitor" class="vision-popup hidden">
+      <div class="vision-header">
+        <span>MoveNet Tracker</span>
+        <span id="tracker-status">Iniciando...</span>
+      </div>
+      <div id="vision-video-wrapper"></div>
+      <div class="vision-stats">
+        <div id="p1-track-info">P1: Calibrando</div>
+        <div id="p2-track-info">P2: En espera</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts Modulares del Juego PONG -->
+  <script src="js/audio.js"></script>
+  <script src="js/pongGame.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/tracker.js"></script>
+  <script src="js/sketch.js"></script>
+</body>
+</html>

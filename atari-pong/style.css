@@ -1,0 +1,301 @@
+/* =========================================================
+   ATARI PONG (1972) - Gabinete Arcade Original y Pantalla CRT
+   ========================================================= */
+
+:root {
+  --wood-dark: #2c1a0e;
+  --wood-mid: #4a2e18;
+  --wood-light: #6a4224;
+  --marquee-bg: #f4edd8;
+  --crt-black: #05070a;
+  --pong-white: #f5f5f5;
+  --arcade-gold: #e2b007;
+  --font-retro: 'Press Start 2P', monospace;
+  --font-score: 'VT323', monospace;
+  --font-sans: 'Space Grotesk', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: radial-gradient(circle at center, #1c1510 0%, #080604 100%);
+  font-family: var(--font-sans);
+  color: #fff;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Estructura del Mueble Arcade de Madera (Fiel a la foto) */
+.arcade-cabinet {
+  position: relative;
+  width: 95vw;
+  max-width: 1100px;
+  height: 96vh;
+  max-height: 900px;
+  background: linear-gradient(135deg, var(--wood-light) 0%, var(--wood-mid) 45%, var(--wood-dark) 100%);
+  border: 10px solid #1a0f08;
+  border-radius: 20px;
+  box-shadow: 
+    0 25px 60px rgba(0, 0, 0, 0.9), 
+    inset 0 0 25px rgba(0, 0, 0, 0.7),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  padding: 16px 24px;
+  gap: 12px;
+}
+
+/* Marquesina Superior Iluminada */
+.cabinet-marquee {
+  background: var(--marquee-bg);
+  border: 4px solid #1a0f08;
+  border-radius: 8px;
+  padding: 6px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 
+    inset 0 0 12px rgba(180, 150, 100, 0.5),
+    0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.pong-logo {
+  font-family: var(--font-retro);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1a0f08;
+  letter-spacing: 6px;
+  text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.6);
+}
+
+.marquee-subtitle {
+  font-family: var(--font-retro);
+  font-size: 0.65rem;
+  color: #5a4228;
+  letter-spacing: 2px;
+}
+
+/* Marco Biselado de la Pantalla CRT */
+.crt-frame {
+  position: relative;
+  flex: 1;
+  background: #000;
+  border: 14px solid #121212;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 
+    inset 0 0 50px rgba(0, 0, 0, 0.95),
+    0 8px 20px rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#canvas-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+#canvas-container canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Efecto de Rayas Scanlines CRT y Curvatura */
+.crt-scanlines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.35) 50%
+  );
+  background-size: 100% 4px;
+  opacity: 0.75;
+}
+
+/* Resplandor de Fósforo CRT */
+.crt-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+  box-shadow: inset 0 0 60px rgba(255, 255, 255, 0.08);
+}
+
+/* Panel Inferior de Controles del Mueble */
+.cabinet-control-panel {
+  background: #1e130a;
+  border: 3px solid #120a05;
+  border-radius: 12px;
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.control-grid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.control-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.control-card label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--arcade-gold);
+  letter-spacing: 1px;
+}
+
+.control-card select {
+  background: #0d0804;
+  border: 1px solid #4a301a;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  font-family: var(--font-sans);
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.control-card select:focus {
+  border-color: var(--arcade-gold);
+}
+
+.control-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.arcade-btn {
+  background: #361f10;
+  border: 2px solid #5a381d;
+  color: #fff;
+  padding: 7px 12px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 0 #180d07;
+}
+
+.arcade-btn:hover {
+  background: var(--arcade-gold);
+  color: #000;
+  border-color: #fff;
+  transform: translateY(-1px);
+}
+
+.arcade-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #180d07;
+}
+
+.arcade-btn.active {
+  background: var(--arcade-gold);
+  color: #000;
+}
+
+/* Leyenda de Instrucciones */
+.instructions-banner {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.64rem;
+  color: #b59b82;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 6px;
+  gap: 12px;
+}
+
+.instructions-banner strong {
+  color: var(--arcade-gold);
+}
+
+/* Ventana de Depuración MoveNet */
+.vision-popup {
+  position: absolute;
+  top: 80px;
+  right: 36px;
+  z-index: 20;
+  width: 220px;
+  background: rgba(10, 10, 10, 0.92);
+  border: 2px solid var(--arcade-gold);
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+  transition: opacity 0.3s ease;
+}
+
+.vision-popup.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.vision-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--arcade-gold);
+  margin-bottom: 6px;
+}
+
+#vision-video-wrapper {
+  width: 100%;
+  height: 120px;
+  background: #000;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+
+#vision-video-wrapper video,
+#vision-video-wrapper canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.vision-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 6px;
+  font-family: monospace;
+  font-size: 0.62rem;
+  color: #ccc;
+}
