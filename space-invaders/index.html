@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPACE INVADERS (1978) - Hand & Vision Arcade Edition</title>
+  
+  <!-- Retro Arcade Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- p5.js Core -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+  
+  <!-- ml5.js v1.2.1 (MoveNet / bodyPose / handPose) -->
+  <script src="https://unpkg.com/ml5@1.2.1/dist/ml5.min.js"></script>
+</head>
+<body>
+  <!-- Gabinete Arcade Space Invaders -->
+  <div class="arcade-cabinet">
+    <!-- Marquesina Superior Iluminada -->
+    <header class="cabinet-marquee">
+      <div class="marquee-logo">SPACE INVADERS</div>
+      <div class="marquee-badge">TAITO &bull; 1978 ARCADE VISION</div>
+    </header>
+
+    <!-- Pantalla CRT con Rayas de Color Clásicas (Rojo, Blanco, Verde) -->
+    <div class="crt-frame">
+      <div id="canvas-container"></div>
+      <div class="crt-overlay"></div>
+      <div class="color-gel-overlay"></div>
+    </div>
+
+    <!-- Panel de Control y Calibración Gestual -->
+    <footer class="cabinet-controls">
+      <div class="controls-row">
+        <div class="control-box">
+          <label for="select-mode">👥 JUGADORES:</label>
+          <select id="select-mode">
+            <option value="1p" selected>1 Jugador (Defensa Solitaria)</option>
+            <option value="2p_coop">2 Jugadores (Cañones Cooperativos)</option>
+          </select>
+        </div>
+
+        <div class="control-box">
+          <label for="select-tracking">🖐️ CONTROL CORPORAL:</label>
+          <select id="select-tracking">
+            <option value="hand" selected>🖐️ Mano (Eje X + Pellizco/Pistola para Disparar)</option>
+            <option value="torso">👤 Torso / Cabeza (Inclinación Lateral + Cabeceo)</option>
+            <option value="keyboard">⌨️ Teclado (Flechas/A-D + Espacio)</option>
+          </select>
+        </div>
+
+        <div class="control-box">
+          <label for="select-difficulty">⚡ OLEADA:</label>
+          <select id="select-difficulty">
+            <option value="classic" selected>Arcade 1978 (Normal)</option>
+            <option value="fast">Velocidad Acelerada</option>
+            <option value="insane">Invasión Masiva</option>
+          </select>
+        </div>
+
+        <div class="buttons-bar">
+          <button id="btn-camera" class="arcade-btn" title="Alternar monitor de visión">📹 Cámara [V]</button>
+          <button id="btn-sound" class="arcade-btn" title="Alternar audio">🔊 Audio [M]</button>
+          <button id="btn-fullscreen" class="arcade-btn" title="Pantalla completa">⛶ Fullscreen [F]</button>
+          <button id="btn-reset" class="arcade-btn" title="Reiniciar">🔄 Reset [R]</button>
+        </div>
+      </div>
+
+      <div class="legend-bar">
+        <span><strong>🖐️ CONTROL CON LA MANO:</strong> Desplaza la mano en el aire para mover el cañón. Haz un pellizco (juntar pulgar e índice) o abre/cierra la palma para disparar el láser.</span>
+        <span><strong>⌨️ TECLADO:</strong> P1: [A]/[D] o [◄]/[►] &bull; Disparar: [Espacio] &bull; P2: [J]/[L] y [K] para disparar.</span>
+      </div>
+    </footer>
+
+    <!-- Monitor de Visión en Miniatura -->
+    <div id="vision-monitor" class="vision-window hidden">
+      <div class="vision-header">
+        <span>Gestural Tracker</span>
+        <span id="tracker-status">Iniciando...</span>
+      </div>
+      <div id="vision-video-wrapper"></div>
+      <div class="vision-stats">
+        <div id="track-pos-info">Mano X: Calibrando</div>
+        <div id="track-gesture-info">Gesto: Esperando disparo</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts Modulares del Juego -->
+  <script src="js/audio.js"></script>
+  <script src="js/invadersGame.js"></script>
+  <script src="js/tracker.js"></script>
+  <script src="js/sketch.js"></script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IA-MID-UAI: Salón Arcade y Experiencias de Visión Artificial</title>
+  
+  <!-- Retro Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Teko:wght@600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Fondo Neón Cyber-Arcade -->
+  <div class="arcade-bg-grid"></div>
+
+  <div class="portal-container">
+    <!-- Header Principal -->
+    <header class="portal-header">
+      <div class="logo-badge">UNIVERSIDAD ADOLFO IBÁÑEZ &bull; INTELIGENCIA ARTIFICIAL</div>
+      <h1 class="portal-title">ARCADE & VISION LAB</h1>
+      <p class="portal-desc">
+        Catálogo interactivo de videojuegos y experiencias generativas de <strong>Pausa Activa</strong> controladas mediante visión computacional en tiempo real (<code>ml5.js MoveNet</code> y <code>p5.js</code>).
+      </p>
+      
+      <div class="header-status-bar">
+        <div class="status-indicator">
+          <span class="live-pulse"></span>
+          <span>4 Experiencias Disponibles para Testear</span>
+        </div>
+        <a href="https://github.com/SrYuyo/IA-MID-UAI" target="_blank" class="repo-link">
+          📁 Ver Repositorio GitHub (SrYuyo/IA-MID-UAI) &rarr;
+        </a>
+      </div>
+    </header>
+
+    <!-- Grilla de Juegos y Experiencias -->
+    <main class="games-grid">
+      
+      <!-- 1. SPACE INVADERS (1978) -->
+      <article class="game-card card-invaders">
+        <div class="card-badge badge-new">NUEVO &bull; ESPECIFICACIÓN MIRO</div>
+        <div class="card-visual visual-invaders">
+          <div class="retro-icon">👾</div>
+          <div class="card-marquee">SPACE INVADERS (1978)</div>
+        </div>
+        <div class="card-body">
+          <h2 class="game-name">Space Invaders con la Mano</h2>
+          <p class="game-summary">
+            El clásico de Taito adaptado para control aéreo gestual. Mueve tu mano en el aire para desplazar el cañón y haz un gesto de percusión/gatillo para disparar ráfagas láser.
+          </p>
+          <div class="game-tags">
+            <span class="tag">🖐️ Gesto con Mano</span>
+            <span class="tag">👥 1P / 2P Cooperativo</span>
+            <span class="tag">4 Búnkeres</span>
+            <span class="tag">OVNI Misterioso</span>
+          </div>
+          <div class="card-actions">
+            <a href="space-invaders/" class="btn-play btn-glow-green">🚀 JUGAR / TESTEAR AHORA</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 2. ATARI PONG (1972) -->
+      <article class="game-card card-pong">
+        <div class="card-badge badge-classic">CLÁSICO ARCADE</div>
+        <div class="card-visual visual-pong">
+          <div class="retro-icon">🕹️</div>
+          <div class="card-marquee">ATARI PONG (1972)</div>
+        </div>
+        <div class="card-body">
+          <h2 class="game-name">Atari PONG Arcade</h2>
+          <p class="game-summary">
+            Gabinete de madera de 1972 con pantalla CRT. Controla la pala vertical mediante el movimiento de tu cabeza o elevación de brazos. Juega contra la IA o en duelo local de 2 personas.
+          </p>
+          <div class="game-tags">
+            <span class="tag">🗣️ Control Cabeza</span>
+            <span class="tag">💪 Control Brazos</span>
+            <span class="tag">🤖 3 Dificultades IA</span>
+            <span class="tag">👥 1P vs CPU / 2P</span>
+          </div>
+          <div class="card-actions">
+            <a href="atari-pong/" class="btn-play btn-glow-gold">🏓 JUGAR / TESTEAR AHORA</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 3. ECOFLUIDO GENERATIVO -->
+      <article class="game-card card-fluido">
+        <div class="card-badge badge-art">INSTALACIÓN AMBIENTAL</div>
+        <div class="card-visual visual-fluido">
+          <div class="retro-icon">🌊</div>
+          <div class="card-marquee">ECOFLUIDO GENERATIVO</div>
+        </div>
+        <div class="card-body">
+          <h2 class="game-name">Fluidos para Pausa Activa</h2>
+          <p class="game-summary">
+            Sistema generativo de física de fluidos (Navier-Stokes) para proyectores en muros de oficina. Modula colores fríos y derivas lentas en reposo, y estelas cálidas vivas ante pasos dinámicos.
+          </p>
+          <div class="game-tags">
+            <span class="tag">🚶 Visión Corporal</span>
+            <span class="tag">🎨 Arte Generativo</span>
+            <span class="tag">✨ Estelas Luminosas</span>
+            <span class="tag">🖼️ Proyección [F]</span>
+          </div>
+          <div class="card-actions">
+            <a href="ecofluido-generativo/" class="btn-play btn-glow-cyan">🌌 PROYECTAR / TESTEAR</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 4. SUPER K.O. BOXING -->
+      <article class="game-card card-boxing">
+        <div class="card-badge badge-action">FIGHTING ARCADE</div>
+        <div class="card-visual visual-boxing">
+          <div class="retro-icon">🥊</div>
+          <div class="card-marquee">SUPER K.O. BOXING</div>
+        </div>
+        <div class="card-body">
+          <h2 class="game-name">Super K.O. Boxing Tracker</h2>
+          <p class="game-summary">
+            Videojuego de boxeo arcade estilo Punch-Out!! controlado con tu propio cuerpo. Esquiva inclinando el torso, agáchate, bloquea con las muñecas y lanza directos contra rivales de IA.
+          </p>
+          <div class="game-tags">
+            <span class="tag">🥊 Esquivas & Puñetazos</span>
+            <span class="tag">🛡️ Guardia Activa</span>
+            <span class="tag">🤖 Rivales IA Arcade</span>
+            <span class="tag">💥 Super K.O.</span>
+          </div>
+          <div class="card-actions">
+            <a href="super-ko-boxing/" class="btn-play btn-glow-red">🥊 JUGAR / TESTEAR AHORA</a>
+          </div>
+        </div>
+      </article>
+
+    </main>
+
+    <!-- Footer Informativo -->
+    <footer class="portal-footer">
+      <div class="footer-tips">
+        <span>💡 <strong>Consejo para pruebas:</strong> Asegúrate de otorgar permisos de cámara en tu navegador para que los modelos <code>ml5.js</code> detecten tus movimientos sin fricción. Todos los juegos incluyen atajo <strong>[V]</strong> para inspeccionar la visión y <strong>[F]</strong> para pantalla completa.</span>
+      </div>
+      <div class="footer-copy">
+        &copy; 2026 Laboratorio de Inteligencia Artificial &bull; Universidad Adolfo Ibáñez &bull; Proyectos de Interacción y Pausa Activa
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
