@@ -12,6 +12,16 @@
  * - 2P Local: Si hay 2 personas, persona izquierda -> P1, persona derecha -> P2
  */
 
+/**
+ * Devuelve la coordenada X de referencia de una persona: la nariz si existe,
+ * el punto medio de los hombros, o el único hombro visible.
+ */
+function bodyCenterX(nose, lShoulder, rShoulder) {
+  if (nose) return nose.x;
+  if (lShoulder && rShoulder) return (lShoulder.x + rShoulder.x) / 2;
+  return (lShoulder || rShoulder).x;
+}
+
 class PongTracker {
   constructor() {
     this.video = null;
@@ -110,8 +120,8 @@ class PongTracker {
       }
 
       if (nose || lShoulder || rShoulder) {
-        // Centro X del cuerpo (espejado)
-        const refX = nose ? nose.x : ((lShoulder.x + rShoulder.x) / 2);
+        // Centro X del cuerpo (espejado). Si solo se ve un hombro, se usa ese.
+        const refX = bodyCenterX(nose, lShoulder, rShoulder);
         const normScreenX = 1.0 - (refX / vw);
 
         validBodies.push({

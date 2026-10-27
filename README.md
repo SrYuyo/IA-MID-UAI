@@ -28,6 +28,55 @@ Esta es la **página web completa e interactiva ("Arcade & Vision Lab")** que re
 
 ## 📁 Catálogo de Proyectos y Estructura del Repositorio
 
+Cada juego vive en su propia carpeta y es una página independiente (HTML + CSS + JavaScript con p5.js y ml5.js cargados desde CDN). No hay que instalar ni compilar nada.
+
+```
+IA-MID-UAI/
+├── index.html                 ← Portal "Arcade & Vision Lab" (página principal)
+├── style.css
+├── space-invaders/            ← 👾 Space Invaders con la mano
+│   ├── index.html · style.css · README.md
+│   └── js/  audio.js · invadersGame.js · tracker.js · sketch.js
+├── atari-pong/                ← 🏓 Atari PONG
+│   ├── index.html · style.css · README.md
+│   └── js/  audio.js · pongGame.js · ai.js · tracker.js · sketch.js
+├── ecofluido-generativo/      ← 🌊 EcoFluido Generativo
+│   ├── index.html · style.css · README.md
+│   └── js/  fluidField.js · particleSystem.js · bodyTracker.js · sketch.js
+└── super-ko-boxing/           ← 🥊 Super K.O. Boxing
+    ├── index.html · style.css · README.md
+    └── js/  audio.js · fx.js · ring.js · tracker.js · player.js · opponent.js · sketch.js
+```
+
+Todos los juegos siguen la misma división:
+
+| Archivo | Responsabilidad |
+| :--- | :--- |
+| `tracker.js` / `bodyTracker.js` | Cámara + MoveNet (ml5.js): convierte el cuerpo en valores de control |
+| `*Game.js`, `player.js`, `opponent.js`, `fluidField.js`… | Reglas, física y dibujo del juego |
+| `audio.js` | Efectos de sonido generados con Web Audio |
+| `sketch.js` | Orquestador p5.js: `setup()`, `draw()`, teclado y botones |
+
+### ▶️ Probar en local
+
+Los navegadores solo dan acceso a la cámara en `https://` o en `localhost`, así que no basta con abrir el `index.html` con doble clic. Desde la carpeta del repositorio:
+
+```bash
+python3 -m http.server 8000
+```
+
+y luego abre <http://localhost:8000>.
+
+### ⌨️ Si no hay cámara
+
+Todos los juegos se pueden jugar con teclado; el teclado tiene prioridad mientras se presiona.
+
+| Juego | Controles |
+| :--- | :--- |
+| Space Invaders | **A/D** o **←/→** mover · **Espacio/W** disparar · J/L y K para el jugador 2 |
+| Atari PONG | **W/S** jugador 1 · **↑/↓** o **I/K** jugador 2 · **Espacio** sacar |
+| EcoFluido | **S** cambia a simulación con mouse o automática · **C** limpiar · **H** ocultar panel |
+| Super K.O. Boxing | **Z/X** golpes · **S** súper golpe · **←/→** esquivar · **↓** agacharse · **Espacio** guardia |
 
 ---
 

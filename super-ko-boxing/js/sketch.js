@@ -91,6 +91,8 @@ function startMatch() {
   roundTimerFrames = 0;
   player.reset();
   opponent.reset();
+  tracker.keyAction = null;
+  tracker.keyBlocking = false;
   gameState = 'ROUND_INTRO';
   refereeTimer = 90; // ~1.5s intro banner
   soundFX.playBell();
@@ -690,13 +692,13 @@ function keyPressed() {
     } else if (key === 's' || key === 'S') {
       executePlayerPunch('SUPER_PUNCH');
     } else if (keyCode === LEFT_ARROW) {
-      tracker.currentAction = 'DODGE_LEFT';
+      tracker.keyAction = 'DODGE_LEFT';
     } else if (keyCode === RIGHT_ARROW) {
-      tracker.currentAction = 'DODGE_RIGHT';
+      tracker.keyAction = 'DODGE_RIGHT';
     } else if (keyCode === DOWN_ARROW) {
-      tracker.currentAction = 'DUCK';
+      tracker.keyAction = 'DUCK';
     } else if (key === ' ') {
-      tracker.isBlocking = !tracker.isBlocking;
+      tracker.keyBlocking = !tracker.keyBlocking;
     } else if (key === 'c' || key === 'C') {
       startCalibration();
     } else if (key === 'p' || key === 'P') {
@@ -714,7 +716,7 @@ function keyPressed() {
 function keyReleased() {
   if (gameState === 'FIGHT') {
     if (keyCode === LEFT_ARROW || keyCode === RIGHT_ARROW || keyCode === DOWN_ARROW) {
-      tracker.currentAction = 'IDLE';
+      tracker.keyAction = null;
     }
   }
 }
@@ -724,6 +726,11 @@ function mousePressed() {
   if (video && video.elt) {
     video.elt.play().catch(() => {});
   }
+
+  // p5 recibe los clics de toda la página; ignorar los que caen fuera del
+  // canvas (p. ej. los botones HTML de pantalla completa o cambio de rival),
+  // que antes iniciaban la pelea sin querer.
+  if (mouseX < 0 || mouseX > width || mouseY < 0 || mouseY > height) return;
 
   if (gameState === 'MENU') {
     startMatch();

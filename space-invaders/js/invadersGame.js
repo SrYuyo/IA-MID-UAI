@@ -44,6 +44,7 @@ class InvadersGame {
     this.invaderAnimFrame = 0;
     this.marchTimer = 0;
     this.marchInterval = 44; // Se acelera progresivamente
+    this.speedFactor = 1.0;  // Multiplicador de dificultad (menor = marcha más rápida)
 
     // Búnkeres de defensa
     this.bunkers = [];
@@ -58,10 +59,52 @@ class InvadersGame {
     this.initWave();
   }
 
+  /**
+   * Ajusta el juego a un nuevo tamaño de canvas. Los búnkeres se reubican
+   * conservando el daño que ya recibieron (antes quedaban en la posición
+   * calculada para 800x600 y podían quedar flotando o sobre el cañón).
+   */
   resize(w, h) {
+    const oldSpacing = this.w / (this.bunkers.length + 1);
+    const newSpacing = w / (this.bunkers.length + 1);
+    const dy = (h - 44) - this.cannonY;
+
     this.w = w;
     this.h = h;
     this.cannonY = this.h - 44;
+
+    this.bunkers.forEach((blocks, b) => {
+      const dx = (newSpacing - oldSpacing) * (b + 1);
+      for (const blk of blocks) {
+        blk.x += dx;
+        blk.y += dy;
+      }
+    });
+
+    this.p1X = constrain(this.p1X, 20, this.w - 20 - this.cannonW);
+    this.p2X = constrain(this.p2X, 20, this.w - 20 - this.cannonW);
+  }
+
+  /** Reinicia la partida completa (puntajes, vidas y oleada 1). */
+  resetGame() {
+    this.wave = 1;
+    this.score1 = 0;
+    this.score2 = 0;
+    this.lives1 = 3;
+    this.lives2 = 3;
+    this.state = 'PLAY';
+    this.initWave();
+  }
+
+  /**
+   * Cambia la dificultad. 'classic' = velocidad original, 'fast' y 'insane'
+   * aceleran la marcha de los invasores en toda la partida.
+   */
+  setDifficulty(level) {
+    const factors = { classic: 1.0, fast: 0.64, insane: 0.32 };
+    this.speedFactor = factors[level] || 1.0;
+    this.marchInterval = Math.max(3, Math.floor(44 * this.speedFactor));
+    this.marchTimer = Math.min(this.marchTimer, this.marchInterval);
   }
 
   initWave() {
@@ -94,7 +137,7 @@ class InvadersGame {
     }
 
     this.invaderDir = 1;
-    this.marchInterval = 44;
+    this.marchInterval = Math.max(3, Math.floor(44 * this.speedFactor));
     this.marchTimer = this.marchInterval;
     this.alienMissiles = [];
     this.p1Lasers = [];
@@ -221,7 +264,9 @@ class InvadersGame {
       if (!hit && this.ufo && l.x >= this.ufo.x && l.x <= this.ufo.x + this.ufo.w && l.y >= this.ufo.y && l.y <= this.ufo.y + this.ufo.h) {
         if (playerNum === 1) this.score1 += this.ufo.points;
         else this.score2 += this.ufo.points;
+        this.hiScore = Math.max(this.hiScore, this.score1, this.score2);
         this.ufo = null;
+        this.ufoTimer = 0; // Evita que aparezca otro OVNI de inmediato
         hit = true;
         if (this.audio) {
           this.audio.stopUfoSound();
@@ -247,8 +292,9 @@ class InvadersGame {
       const aliveCount = aliveInvaders.length;
       if (aliveCount === 0) return;
 
-      // Acelerar intervalo: 55 aliens = 44 frames, 1 alien = 4 frames
-      this.marchInterval = Math.max(3, Math.floor(aliveCount * 0.75));
+      // Acelerar intervalo según los invasores vivos (55 → ~41 frames, 1 → 3),
+      // escalado por la dificultad elegida en el menú.
+      this.marchInterval = Math.max(3, Math.floor(aliveCount * 0.75 * this.speedFactor));
       this.marchTimer = this.marchInterval;
       this.invaderAnimFrame = (this.invaderAnimFrame === 0) ? 1 : 0;
 
@@ -428,6 +474,9 @@ class InvadersGame {
     fill(255);
     textFont('Press Start 2P');
     textSize(10);
+    // drawHeader() deja la alineación en (LEFT, TOP); sin este cambio el
+    // contador de vidas se dibujaba bajo el borde inferior y no se veía.
+    textAlign(LEFT, BASELINE);
     text(`${this.lives1}`, 16, this.h - 6);
     fill(0, 255, 100);
     for (let i = 0; i < this.lives1 - 1; i++) {

@@ -23,12 +23,11 @@ class PongAI {
     const ball = { x: game.ballX, y: game.ballY, vx: game.ballVx, vy: game.ballVy };
     const currentY = game.p2Y;
     const paddleH = game.paddleH;
-    const paddleCenter = currentY + paddleH / 2;
 
     let targetY = game.h / 2 - paddleH / 2;
 
     if (this.difficulty === 'easy') {
-      // Reacciona solo cuando la pelota está en su mitad (x > w * 0.45)
+      // Reacciona solo cuando la pelota ya cruzó el 35% de la cancha
       if (ball.vx > 0 && ball.x > game.w * 0.35) {
         targetY = ball.y - paddleH / 2 + Math.sin(frameCount * 0.08) * 35;
       }

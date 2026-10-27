@@ -42,13 +42,14 @@ function setup() {
   particles = new ParticleSystem(config.particleCount);
   particles.init(width, height);
 
+  // Vincular controles de la interfaz ANTES de iniciar la cámara: el callback
+  // del tracker usa las referencias de `dom`, que deben existir cuando se llame.
   tracker = new BodyTracker();
+  initUI();
+
   tracker.init(() => {
     updateStateUI(true, 0);
   });
-
-  // Vincular controles de la interfaz de usuario
-  initUI();
 }
 
 function draw() {

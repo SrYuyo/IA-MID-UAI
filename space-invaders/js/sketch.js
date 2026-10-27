@@ -46,17 +46,19 @@ function draw() {
   let p1TargetX = null;
   let p1Shoot = tracker.p1Shoot || keyP1_Shoot;
 
-  if (tracker.controlMode === 'hand' || tracker.controlMode === 'torso') {
-    p1TargetX = tracker.p1NormX * (game.w - game.cannonW);
+  // Mientras se presiona A/D o las flechas, el teclado tiene prioridad sobre la
+  // cámara; así el juego sigue siendo jugable si la cámara no detecta a nadie.
+  const p1Left = keyIsDown(65) || keyIsDown(LEFT_ARROW);   // A / ←
+  const p1Right = keyIsDown(68) || keyIsDown(RIGHT_ARROW); // D / →
 
-    // Ajuste fino por teclado opcional
-    if (keyIsDown(65) || keyIsDown(LEFT_ARROW)) keyP1_X -= 6;
-    if (keyIsDown(68) || keyIsDown(RIGHT_ARROW)) keyP1_X += 6;
+  if (tracker.controlMode !== 'keyboard' && !p1Left && !p1Right) {
+    // Control por visión (mano o torso)
+    p1TargetX = tracker.p1NormX * (game.w - game.cannonW);
+    keyP1_X = game.p1X; // Mantener sincronizado para que el teclado no "salte"
   } else {
-    // Teclado puro P1
-    if (keyIsDown(65) || keyIsDown(LEFT_ARROW)) keyP1_X -= 6;
-    if (keyIsDown(68) || keyIsDown(RIGHT_ARROW)) keyP1_X += 6;
-    keyP1_X = Math.max(20, Math.min(game.w - 20 - game.cannonW, keyP1_X));
+    if (p1Left) keyP1_X -= 6;
+    if (p1Right) keyP1_X += 6;
+    keyP1_X = constrain(keyP1_X, 20, game.w - 20 - game.cannonW);
     p1TargetX = keyP1_X;
   }
 
@@ -71,7 +73,7 @@ function draw() {
       // Teclado P2 (J/L y K)
       if (keyIsDown(74)) keyP2_X -= 6; // J
       if (keyIsDown(76)) keyP2_X += 6; // L
-      keyP2_X = Math.max(20, Math.min(game.w - 20 - game.cannonW, keyP2_X));
+      keyP2_X = constrain(keyP2_X, 20, game.w - 20 - game.cannonW);
       p2TargetX = keyP2_X;
     }
   }
@@ -108,13 +110,7 @@ function keyPressed() {
   } else if (key === 'k' || key === 'K') {
     keyP2_Shoot = true;
   } else if (key === 'r' || key === 'R') {
-    game.wave = 1;
-    game.score1 = 0;
-    game.score2 = 0;
-    game.lives1 = 3;
-    game.lives2 = 3;
-    game.state = 'PLAY';
-    game.initWave();
+    game.resetGame();
   } else if (key === 'v' || key === 'V') {
     toggleVision();
   } else if (key === 'm' || key === 'M') {
@@ -162,25 +158,13 @@ function initUIEvents() {
   });
 
   document.getElementById("select-difficulty").addEventListener("change", (e) => {
-    if (e.target.value === 'fast') {
-      game.marchInterval = 28;
-    } else if (e.target.value === 'insane') {
-      game.marchInterval = 14;
-    } else {
-      game.marchInterval = 44;
-    }
+    game.setDifficulty(e.target.value);
   });
 
   document.getElementById("btn-camera").addEventListener("click", toggleVision);
   document.getElementById("btn-sound").addEventListener("click", toggleMute);
   document.getElementById("btn-fullscreen").addEventListener("click", toggleFullscreen);
   document.getElementById("btn-reset").addEventListener("click", () => {
-    game.wave = 1;
-    game.score1 = 0;
-    game.score2 = 0;
-    game.lives1 = 3;
-    game.lives2 = 3;
-    game.state = 'PLAY';
-    game.initWave();
+    game.resetGame();
   });
 }

@@ -9,6 +9,16 @@
  * - Modo 2 JUGADORES: Detección dual en cámara para defensa cooperativa simultánea.
  */
 
+/**
+ * Devuelve la coordenada X de referencia de una persona: la nariz si existe,
+ * el punto medio de los hombros, o el único hombro visible.
+ */
+function bodyCenterX(nose, lShoulder, rShoulder) {
+  if (nose) return nose.x;
+  if (lShoulder && rShoulder) return (lShoulder.x + rShoulder.x) / 2;
+  return (lShoulder || rShoulder).x;
+}
+
 class InvadersTracker {
   constructor() {
     this.video = null;
@@ -116,7 +126,7 @@ class InvadersTracker {
       }
 
       if (nose || lShoulder || rShoulder) {
-        const refX = nose ? nose.x : ((lShoulder.x + rShoulder.x) / 2);
+        const refX = bodyCenterX(nose, lShoulder, rShoulder);
         const normScreenX = 1.0 - (refX / vw);
 
         validBodies.push({
@@ -150,14 +160,14 @@ class InvadersTracker {
       // MODO MANO (Tablero Miro):
       // Usar la mano más activa (muñeca derecha o izquierda)
       let activeWrist = null;
-      let refElbow = null;
+      let refShoulder = null; // Hombro del mismo lado que la mano activa
 
       if (body.rWrist && (body.rWrist.confidence || 0) > 0.25) {
         activeWrist = body.rWrist;
-        refElbow = body.rElbow;
+        refShoulder = body.rShoulder;
       } else if (body.lWrist && (body.lWrist.confidence || 0) > 0.25) {
         activeWrist = body.lWrist;
-        refElbow = body.lElbow;
+        refShoulder = body.lShoulder;
       }
 
       if (activeWrist) {
@@ -173,8 +183,9 @@ class InvadersTracker {
           shoot = true;
         }
 
-        // 2. Mano significativamente elevada respecto al codo o los hombros
-        if (body.rShoulder && activeWrist.y < body.rShoulder.y - 15) {
+        // 2. Mano significativamente elevada respecto al hombro del mismo lado
+        //    (antes se comparaba siempre con el hombro derecho)
+        if (refShoulder && activeWrist.y < refShoulder.y - 15) {
           shoot = true;
         }
 

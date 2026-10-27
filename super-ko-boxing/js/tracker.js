@@ -43,6 +43,11 @@ class PoseTracker {
     this.dodgeAmountX = 0; // -1 to 1
     this.duckAmountY = 0;  // 0 to 1
     this.isBlocking = false;
+
+    // Keyboard fallback (set from sketch.js). Applied after the camera
+    // classification so keyboard dodges/blocks are not overwritten each frame.
+    this.keyAction = null;    // 'DODGE_LEFT' | 'DODGE_RIGHT' | 'DUCK' | null
+    this.keyBlocking = false;
   }
 
   init(videoCapture) {
@@ -174,6 +179,18 @@ class PoseTracker {
   }
 
   update() {
+    this.updateFromCamera();
+
+    // Keyboard overrides (arrows = dodge/duck, space = guard toggle)
+    if (this.keyBlocking) {
+      this.isBlocking = true;
+      this.currentAction = 'BLOCK';
+    } else if (this.keyAction) {
+      this.currentAction = this.keyAction;
+    }
+  }
+
+  updateFromCamera() {
     if (this.punchCooldown > 0) {
       this.punchCooldown--;
     }

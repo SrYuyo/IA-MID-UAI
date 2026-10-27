@@ -43,20 +43,19 @@ function draw() {
   tracker.update();
 
   // 2. Determinar posición objetivo para Pala 1 (Izquierda)
-  let p1TargetY = game.p1Y;
+  // Mientras se presiona W/S el teclado tiene prioridad; así el juego sigue
+  // siendo jugable aunque la cámara no esté disponible o no detecte a nadie.
+  const p1KeyActive = keyIsDown(87) || keyIsDown(83); // W / S
+  let p1TargetY;
 
-  if (tracker.controlMode === 'head' || tracker.controlMode === 'arms') {
-    // Control por Visión
+  if (tracker.controlMode !== 'keyboard' && !p1KeyActive) {
+    // Control por Visión (cabeza o brazos)
     p1TargetY = tracker.p1NormY * (game.h - game.paddleH);
-
-    // Ajuste complementario por teclado si se presiona W/S
-    if (keyIsDown(87)) keyP1_Y -= 7; // W
-    if (keyIsDown(83)) keyP1_Y += 7; // S
+    keyP1_Y = game.p1Y; // Mantener sincronizado para que el teclado no "salte"
   } else {
-    // Modo Teclado puro
     if (keyIsDown(87)) keyP1_Y -= 7; // W
     if (keyIsDown(83)) keyP1_Y += 7; // S
-    keyP1_Y = Math.max(0, Math.min(game.h - game.paddleH, keyP1_Y));
+    keyP1_Y = constrain(keyP1_Y, 0, game.h - game.paddleH);
     p1TargetY = keyP1_Y;
   }
 
@@ -74,7 +73,7 @@ function draw() {
       // Teclado P2 (Flechas arriba/abajo o I/K)
       if (keyIsDown(UP_ARROW) || keyIsDown(73)) keyP2_Y -= 7;
       if (keyIsDown(DOWN_ARROW) || keyIsDown(75)) keyP2_Y += 7;
-      keyP2_Y = Math.max(0, Math.min(game.h - game.paddleH, keyP2_Y));
+      keyP2_Y = constrain(keyP2_Y, 0, game.h - game.paddleH);
       p2TargetY = keyP2_Y;
     }
   }
@@ -104,6 +103,9 @@ function windowResized() {
 function keyPressed() {
   if (key === ' ' && game.state === 'SERVE') {
     game.launchBall();
+  } else if (key === ' ' && game.state === 'GAME_OVER') {
+    // El cartel de fin de partida ofrece [R] o [ESPACIO] para reiniciar
+    game.resetMatch();
   } else if (key === 'r' || key === 'R') {
     game.resetMatch();
   } else if (key === 'v' || key === 'V') {
